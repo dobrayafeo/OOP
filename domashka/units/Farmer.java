@@ -2,15 +2,15 @@ package units;
 
 import java.util.ArrayList;
 
-public class Farmer extends Warrior {
+public class Farmer extends Character{
 
-  public Farmer(String name, int x, int y) {
-    super(name, x, y);
+  public Farmer(Names name, int x, int y) {
+    super(name, 4, 4, 1, 1, 1, x, y);
   }
 
   @Override
   public void step(ArrayList<Character> team, ArrayList<Character> team2){
-    Character nearestFoe = findNearest(team);
-//    System.out.printf("%s in %d\n", nearestFoe.getInfo(), position.getDistance(nearestFoe.getCoordinates()));
+    if (this.isDead()) return;
+    state = States.READY;
   }
   }
