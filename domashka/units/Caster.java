@@ -7,14 +7,15 @@ public abstract class Caster extends Character implements CharacterInterface {
   int mana;
   int maxMana;
 
-  public Caster(Names name, int hp, int maxHp, int damage, int defense, int initiative, int mana, int maxMana, int x, int y) {
-    super(name, hp, maxHp, damage, defense, initiative, x, y);
+  public Caster(Names name, int hp, int maxHp, int damage, int defense, int initiative, int mana, int maxMana, int row, int col) {
+    super(name, hp, maxHp, damage, defense, initiative, row, col);
     this.mana = mana;
     this.maxMana = maxMana;
   }
 
   private Character findMostDamaged(ArrayList<Character> team) {
-    Character mostDamaged = new Farmer(Names.Arya, 30, 30);
+    if (team.size() == 0) return null;
+    Character mostDamaged = team.get(0);
     for (Character character : team) {
       if (!character.state.equals(States.DEAD)
               && character.hp < character.maxHp
@@ -35,7 +36,7 @@ public abstract class Caster extends Character implements CharacterInterface {
       state = States.NOMANA;
       return;
     }
-    Character damagedFriend = findMostDamaged(teamFriend);
+    Character damagedFriend = findMostDamaged(getNotDeadTeamMembers(teamFriend));
     if (damagedFriend != null) {
       damagedFriend.getHealing(damage);
       mana -= damage;

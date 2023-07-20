@@ -11,16 +11,17 @@ import map.Directions;
 import java.util.ArrayList;
 
 public abstract class Warrior extends Character implements CharacterInterface {
-  public Warrior(Names name, int hp, int maxHp, int damage, int defense, int initiative, int x, int y) {
-    super(name, hp, maxHp, damage, defense, initiative, x, y);
+  public Warrior(Names name, int hp, int maxHp, int damage, int defense, int initiative, int row, int col) {
+    super(name, hp, maxHp, damage, defense, initiative, row, col);
   }
 
   @Override
   public void step(ArrayList<Character> teamFoe, ArrayList<Character> teamFriend) {
     if (this.isDead()) return;
-    Character nearestFoe = findNearest(teamFoe);
+    Character nearestFoe = findNearest(getNotDeadTeamMembers(teamFoe));
+    if (nearestFoe == null) return;
     if (this.attack(nearestFoe)) return;
-    this.move(nearestFoe, teamFriend, teamFoe);
+    this.move(nearestFoe, getNotDeadTeamMembers(teamFriend), getNotDeadTeamMembers(teamFoe));
   }
 
   @Override
@@ -60,7 +61,7 @@ public abstract class Warrior extends Character implements CharacterInterface {
         break;
       case EAST:
         if (this.checkStepAheadIsAvailable(team1, new Coordinates(this.getCoordinates().toArray()[0], this.getCoordinates().toArray()[1] + 1))
-          && this.checkStepAheadIsAvailable(team2, new Coordinates(this.getCoordinates().toArray()[0], this.getCoordinates().toArray()[1] + 1)))
+                && this.checkStepAheadIsAvailable(team2, new Coordinates(this.getCoordinates().toArray()[0], this.getCoordinates().toArray()[1] + 1)))
           this.position.setCoordinates(this.getCoordinates().toArray()[0], this.getCoordinates().toArray()[1] + 1);
         state = States.MOVE;
         break;
